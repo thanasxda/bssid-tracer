@@ -1,0 +1,8 @@
+browser
+nmap
+netstat
+aircrack-ng
+ettercap
+msfconsole
+routersploit
+maltego

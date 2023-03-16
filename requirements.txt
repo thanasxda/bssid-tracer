@@ -1,0 +1,5 @@
+tk
+requests
+json
+re
+pillow
