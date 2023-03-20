@@ -1,8 +1,10 @@
 browser
 nmap
 netstat
+traceroute
 aircrack-ng
 ettercap
 msfconsole
 routersploit
 maltego
+reaver
