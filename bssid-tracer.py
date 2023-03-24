@@ -65,6 +65,41 @@ def openWindow2():
 	Label(Window2,bg='#000', fg='orange', borderwidth=4, relief="solid", text=message).grid(column=0, row=0)
 	btnok = Button(Window2, text="OK", borderwidth=4, relief="solid", bg='#000', fg='orange', command=Window2.destroy)
 	btnok.grid(column=0, row=2)
+	
+# 3 ##############
+def openWindow3():
+	Window3 = Toplevel(root)
+	Window3['bg']='black'
+	Window3.title("B/SSID-TRACER")
+	message="Your API key failed to authenticate!"
+	Label(Window3,bg='#000', fg='orange', borderwidth=4, relief="solid", text=message).grid(column=0, row=0)
+	btnok = Button(Window3, text="OK", borderwidth=4, relief="solid", bg='#000', fg='orange', command=Window3.destroy)
+	btnok.grid(column=0, row=2)
+############################
+
+# API CONFIG ##############
+def openWindowAPI():
+	WindowAPI = Toplevel(root)
+	WindowAPI['bg']='black'
+	WindowAPI.title("B/SSID-TRACER")
+	message="Enter Wigle API key:"
+	Label(WindowAPI,bg='#000', fg='orange', borderwidth=4, relief="solid", text=message).grid(column=0, row=0)
+	#cat="echo $(awk -F 'wigle = ' '{print $2}' $PWD/src/api.env)"
+	#output = subprocess.check_output(cat, shell=True)
+	#cat=open("src/api.env", "r")
+	#cleanoutput=cat.read().rstrip('\n')
+	#cleanoutput = output.decode(encoding='UTF-8')
+	wigleapi = StringVar(WindowAPI, value="")
+	wigleapiTf = Entry(WindowAPI, textvariable=wigleapi).grid(column=0, row=1)
+	#cat.close()
+	#cat=open("src/api.env", "a")
+	#btn_wigleapi = Button(WindowAPI, text="Save API Keys", borderwidth=4, relief="solid", bg='#000', fg='orange', command=os.system("echo 'wigle = "+wigleapi.get()+"' > src/api.txt"))
+	def write():
+		f = open("src/api.env", "w")
+		f.write(wigleapi.get())
+		f.close()
+	btn_wigleapi = Button(WindowAPI, text="Save API Keys", borderwidth=4, relief="solid", bg='#000', fg='orange', command=write)
+	btn_wigleapi.grid(column=0, row=2)
 ############################
 
 
@@ -123,84 +158,125 @@ def searchWifiDb():
 btn_wdb = Button(root,bg='#000', fg='orange', text='Search Wifidb w/ Google (B/SSID)', borderwidth=4, relief="solid", command=searchWifiDb)
 btn_wdb.grid(column=0, row=6)
 
+# requests for wigle json ##############
+def wigle():
+	cat=open("src/api.env", "r")
+	cleanoutput=cat.read().rstrip('\n')
+	headers = {'Accept': 'application/json', 'Authorization': f'Basic {cleanoutput}'}
+	url = 'https://api.wigle.net/api/v2/network/search'
+	if ssid != "":
+		wigpar = {'ssid': ssid.get(), 'resultsPerPage': 1}
+	if mac != "":
+		wigpar = {'netid': mac.get(), 'resultsPerPage': 1}
+	if ssid != "" and mac != "":
+		wigpar = {'ssid': ssid.get(), 'netid': mac.get(), 'resultsPerPage': 1}
+	requ = requests.get(url, headers=headers, params=wigpar)
+	resp = requ.content
+	json_pars = json.loads(resp)
+	array_request = json_pars["results"]
+	request_data = json.dumps(array_request)
+	cat.close()
+	if (array_request != 0): # found
+		array_latitude = json_pars["trilat"]
+		array_longitude = json_pars["trilong"]
+		latitude_data = json.dumps(array_latitude)
+		longitude_data = json.dumps(array_longitude)
+		os.system("xdg-open 'https://earth.google.com/web/@"+latitude_data+","+longitude_data+"'")
+	elif (request_data == "404"):
+		openWindow0() # entry not found
+	elif (request_data == "400"):
+		openWindow1() # incorrect entry
+	elif (request_data == "401"):
+		openWindow3() # incorrect api
+	else:
+		openWindow2() # connection issue
+btn_wigle = Button(root,bg='#000', fg='orange', text='Search Wigle /w Google (B/SSID)', borderwidth=4, relief="solid", command=wigle)
+btn_wigle.grid(column=0, row=7)
+
 # search wifidb browser ##############
 def searchBrowser():
 	os.system("xdg-open 'https://wifidb.net/wifidb/opt/results.php?&ssid="+ssid.get()+"&mac="+mac.get()+"&radio=&chan=&auth=&encry=&sectype='")
 btn_wdbon = Button(root,bg='#000', fg='orange', text='Search Wifidb online (B/SSID)', borderwidth=4, relief="solid", command=searchBrowser)
-btn_wdbon.grid(column=0, row=7)
+btn_wdbon.grid(column=0, row=8)
+
+# search wigle browser ##############
+def searchBrowser():
+	os.system("xdg-open 'https://wigle.net/mapsearch?'")
+btn_wigleon = Button(root,bg='#000', fg='orange', text='Search Wigle online (B/SSID)', borderwidth=4, relief="solid", command=searchBrowser)
+btn_wigleon.grid(column=0, row=9)
 ############################
 
 
 # COORDINATE OPTIONS ##############
 # coordinate input fields ##############
-Label(root,bg='#000', fg='orange', text='Longitude: ').grid(column=0, row=8)
+Label(root,bg='#000', fg='orange', text='Longitude: ').grid(column=0, row=10)
 llong = StringVar(root, value="")
-llongTf = Entry(root, textvariable=llong).grid(column=0, row=9)
+llongTf = Entry(root, textvariable=llong).grid(column=0, row=11)
 
-Label(root,bg='#000', fg='orange', text='Latitude: ').grid(column=0, row=10)
+Label(root,bg='#000', fg='orange', text='Latitude: ').grid(column=0, row=12)
 llat = StringVar(root, value="")
-llatTf = Entry(root, textvariable=llat).grid(column=0, row=11)
+llatTf = Entry(root, textvariable=llat).grid(column=0, row=13)
 ############################
 
 # search coordinates ##############
 def manualS():
 	os.system("xdg-open 'https://earth.google.com/web/@"+llat.get()+","+llong.get()+"'")
 btn_crdnts = Button(root,bg='#000', fg='orange', text='Search coordinates', borderwidth=4, relief="solid", command=manualS)
-btn_crdnts.grid(column=0, row=12)
+btn_crdnts.grid(column=0, row=14)
 ############################
 
 
 # IP OPTIONS ##############
 # ip input field ##############
-Label(root,bg='#000', fg='orange', text='Enter ip: ').grid(column=0, row=13)
+Label(root,bg='#000', fg='orange', text='Enter ip: ').grid(column=0, row=15)
 ipc = StringVar(root, value="")
-ipcTf = Entry(root, textvariable=ipc).grid(column=0, row=14)
+ipcTf = Entry(root, textvariable=ipc).grid(column=0, row=16)
 ############################
 
 # ip search ripestat ##############
 def ipL():
 	os.system("xdg-open 'https://stat.ripe.net/app/launchpad/S1_"+ipc.get()+"_C13eC31eC6eC14eC27eC10e'")
 btn_rpst = Button(root,bg='#000', fg='orange', text='Search Ripestat', borderwidth=4, relief="solid", command=ipL)
-btn_rpst.grid(column=0, row=15)
+btn_rpst.grid(column=0, row=17)
 
 # ip search shodan ##############
 def Sho():
 		os.system("xdg-open 'https://www.shodan.io/search?query="+ipc.get()+"'")
 btn_sho = Button(root,bg='#000', fg='orange', text='Search Shodan', borderwidth=4, relief="solid", command=Sho)
-btn_sho.grid(column=0, row=16)
+btn_sho.grid(column=0, row=18)
 
 # ip search abuse ipdb ##############
 def abIPDB():
 		os.system("xdg-open 'https://www.abuseipdb.com/check/"+ipc.get()+"'")
 btn_sho = Button(root,bg='#000', fg='orange', text='Search AbuseIPDB', borderwidth=4, relief="solid", command=abIPDB)
-btn_sho.grid(column=0, row=17)
+btn_sho.grid(column=0, row=19)
 
 # ip nmap scan ##############
 def ipS():
 	os.system("nmap -v -p \"*\" "+ipc.get())
 btn_prts = Button(root,bg='#000', fg='orange', text='Scan ports', borderwidth=4, relief="solid", command=ipS)
-btn_prts.grid(column=0, row=18)
+btn_prts.grid(column=0, row=20)
 
 # ip traceroute ##############
 def trC():
 	os.system("traceroute "+ipc.get())
 btn_trc = Button(root,bg='#000', fg='orange', text='Traceroute', borderwidth=4, relief="solid", command=trC)
-btn_trc.grid(column=0, row=19)
+btn_trc.grid(column=0, row=21)
 
 # ip ping ##############
 def pnG():
 	os.system("ping -c4 "+ipc.get())
 btn_png = Button(root,bg='#000', fg='orange', text='Ping', borderwidth=4, relief="solid", command=pnG)
-btn_png.grid(column=0, row=20)
+btn_png.grid(column=0, row=22)
 
 # aircrack-ng/aireplay-ng deauth ##############
-Label(root,bg='#000', fg='orange', text='Target mac address: ').grid(column=0, row=21)
+Label(root,bg='#000', fg='orange', text='Target mac address: ').grid(column=0, row=23)
 client = StringVar(root, value="")
-clientTf = Entry(root, textvariable=llat).grid(column=0, row=22)
+clientTf = Entry(root, textvariable=llat).grid(column=0, row=24)
 def dAuth():
 	os.system("aireplay-ng -0 1 -a "+mac.get()+" -c "+client.get()+" $(ip -o link | grep -i wlan | awk -F ':' '{print $2}' | head -n1)mon")
 btn_client = Button(root,bg='#000', fg='orange', text='Deauthenticate target', borderwidth=4, relief="solid", command=dAuth)
-btn_client.grid(column=0, row=23)
+btn_client.grid(column=0, row=25)
 ############################
 
 
@@ -259,9 +335,9 @@ btn_grbfy.grid(column=1, row=9)
 # dictionary ##############
 def selDict():
 	dictFile = tkinter.filedialog.askopenfilename(initialdir='~/Downloads', title='', filetypes=(("Text files", "*.txt"), ("All files", "*.*")))
-	if mac.get() != 0:
+	if mac.get() != "":
 		os.system("'grep -i "+mac.get()+" "+dictFile.get()+"'")
-	if ssid.get() != 0:
+	if ssid.get() != "":
 		os.system("'grep -i "+ssid.get()+" "+dictFile.get()+"'")
 btn_dict = Button(root,bg='#000', fg='orange', text='Search dictionary for B/SSID', borderwidth=4, relief="solid", command=selDict)
 btn_dict.grid(column=1, row=10)
@@ -293,7 +369,7 @@ btn_edb.grid(column=1, row=14)
 # intelx ##############
 Label(root,bg='#000', fg='orange', text='Intelligence-X: ').grid(column=1, row=15)
 ix = StringVar(root, value="")
-ixTf = Entry(root, textvariable=mac).grid(column=1, row=16)
+ixTf = Entry(root, textvariable=ix).grid(column=1, row=16)
 def siX():
 		os.system("xdg-open 'https://intelx.io/?s="+ix.get()+"'")
 btn_ix = Button(root,bg='#000', fg='orange', text='Search Intelx', borderwidth=4, relief="solid", command=siX)
@@ -301,10 +377,15 @@ btn_ix.grid(column=1, row=17)
 ############################
 
 
+# API KEYS ##############
+Label(root,bg='#000', fg='orange', text='API Keys: ').grid(column=1, row=18)
+btn_apk = Button(root,bg='#000', fg='orange', text='Configure API Keys', borderwidth=4, relief="solid", command=openWindowAPI)
+btn_apk.grid(column=1, row=19)
+############################
 
 
 # ATTACK OPTIONS ##############
-Label(root,bg='#000', fg='orange', text='Attacks: ').grid(column=1, row=18)
+Label(root,bg='#000', fg='orange', text='Attacks: ').grid(column=1, row=20)
 ############################
 
 # aircrack-ng ##############
@@ -313,28 +394,28 @@ def airMon():
 	os.seteuid(1000)
 	os.system("if airmon-ng | grep -qi wlan ; then airmon-ng stop $(ip -o link | grep -i wlan | awk -F ':' '{print $2}' | head -n1)mon ; else sudo airmon-ng start $(ip -o link | grep -i wlan | awk -F ':' '{print $2}' | head -n1)mon ; fi")
 btn_airmn = Button(root,bg='#000', fg='orange', text='Start/stop monitor mode', borderwidth=4, relief="solid", command=airMon)
-btn_airmn.grid(column=1, row=19)
+btn_airmn.grid(column=1, row=21)
 
 # airodump
 def airoD():
 	os.seteuid(1000)
 	os.system("airodump-ng $(ip -o link | grep -i wlan | awk -F ':' '{print $2}' | head -n1)mon --bssid "+mac.get())
 btn_airmn = Button(root,bg='#000', fg='orange', text='Airodump BSSID', borderwidth=4, relief="solid", command=airoD)
-btn_airmn.grid(column=1, row=20)
+btn_airmn.grid(column=1, row=22)
 
 # reaver ##############
 def wps():
 		os.system("reaver -i $(ip -o link | grep -i wlan | awk -F ':' '{print $2}' | head -n1)mon -b "+mac.get())
 btn_rvr = Button(root,bg='#000', fg='orange', text='Reaver BSSID attack', borderwidth=4, relief="solid", command=root.destroy)
-btn_rvr.grid(column=1, row=21)
+btn_rvr.grid(column=1, row=23)
 ############################
 
 
 # DISCLAIMER & EXIT ##############
-Label(root,bg='#000', fg='#f00', font=('Helvetica',6), text='DISCLAIMER: DOES NOT PROMOTE ILLEGAL ACTIVITIES\nUSE FOR ETHICAL/EDUCATIONAL PURPOSE ONLY\nRESPECT THE PRIVACY OF OTHERS!!!').grid(column=1, row=22)
-Label(root,bg='#000', fg='orange', font=('Helvetica',8), text='by thanasxda').grid(column=1, row=23)
+Label(root,bg='#000', fg='#f00', font=('Helvetica',6), text='DISCLAIMER: DOES NOT PROMOTE ILLEGAL ACTIVITIES\nUSE FOR ETHICAL/EDUCATIONAL PURPOSE ONLY\nRESPECT THE PRIVACY OF OTHERS!!!').grid(column=1, row=24)
+Label(root,bg='#000', fg='orange', font=('Helvetica',8), text='by thanasxda').grid(column=1, row=25)
 btn_exit = Button(root,bg='#000', fg='orange', text='Exit', borderwidth=4, relief="solid", command=root.destroy)
-btn_exit.grid(column=1, row=24)
+btn_exit.grid(column=1, row=26)
 ############################
 
 
