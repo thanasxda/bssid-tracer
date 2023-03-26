@@ -30,7 +30,7 @@ render = ImageTk.PhotoImage(load)
 root.iconphoto(False, render)
 cv = Canvas(root, highlightthickness=0, height=115, width=300)
 cv['bg']='black'
-cv.grid(column=0, columnspan=3)
+cv.grid(column=0, columnspan=5)
 cv.create_image(150, 0, image=render, anchor='n')
 ############################
 
@@ -228,118 +228,119 @@ btn_crdnts.grid(column=0, row=14)
 
 # IP OPTIONS ##############
 # ip input field ##############
-Label(root,bg='#000', fg='orange', text='Enter ip: ').grid(column=0, row=15)
+Label(root,bg='#000', fg='orange', text='Enter ip: ').grid(column=1, row=1)
 ipc = StringVar(root, value="")
-ipcTf = Entry(root, textvariable=ipc).grid(column=0, row=16)
+ipcTf = Entry(root, textvariable=ipc).grid(column=1, row=2)
 ############################
 
 # ip search ripestat ##############
 def ipL():
 	os.system("xdg-open 'https://stat.ripe.net/app/launchpad/S1_"+ipc.get()+"_C13eC31eC6eC14eC27eC10e'")
 btn_rpst = Button(root,bg='#000', fg='orange', text='Search Ripestat', borderwidth=4, relief="solid", command=ipL)
-btn_rpst.grid(column=0, row=17)
+btn_rpst.grid(column=1, row=3)
 
 # ip search shodan ##############
 def Sho():
 		os.system("xdg-open 'https://www.shodan.io/search?query="+ipc.get()+"'")
 btn_sho = Button(root,bg='#000', fg='orange', text='Search Shodan', borderwidth=4, relief="solid", command=Sho)
-btn_sho.grid(column=0, row=18)
+btn_sho.grid(column=1, row=4)
 
 # ip search abuse ipdb ##############
 def abIPDB():
 		os.system("xdg-open 'https://www.abuseipdb.com/check/"+ipc.get()+"'")
 btn_sho = Button(root,bg='#000', fg='orange', text='Search AbuseIPDB', borderwidth=4, relief="solid", command=abIPDB)
-btn_sho.grid(column=0, row=19)
+btn_sho.grid(column=1, row=5)
 
 # ip nmap scan ##############
 def ipS():
 	os.system("nmap -v -p \"*\" "+ipc.get())
 btn_prts = Button(root,bg='#000', fg='orange', text='Scan ports', borderwidth=4, relief="solid", command=ipS)
-btn_prts.grid(column=0, row=20)
+btn_prts.grid(column=1, row=6)
 
 # ip traceroute ##############
 def trC():
 	os.system("traceroute "+ipc.get())
 btn_trc = Button(root,bg='#000', fg='orange', text='Traceroute', borderwidth=4, relief="solid", command=trC)
-btn_trc.grid(column=0, row=21)
+btn_trc.grid(column=1, row=7)
 
 # ip ping ##############
 def pnG():
 	os.system("ping -c4 "+ipc.get())
 btn_png = Button(root,bg='#000', fg='orange', text='Ping', borderwidth=4, relief="solid", command=pnG)
-btn_png.grid(column=0, row=22)
+btn_png.grid(column=1, row=8)
 
 # aircrack-ng/aireplay-ng deauth ##############
-Label(root,bg='#000', fg='orange', text='Target mac address: ').grid(column=0, row=23)
+Label(root,bg='#000', fg='orange', text='Target mac address: ').grid(column=1, row=9)
 client = StringVar(root, value="")
-clientTf = Entry(root, textvariable=llat).grid(column=0, row=24)
+clientTf = Entry(root, textvariable=llat).grid(column=1, row=10)
 def dAuth():
 	os.system("aireplay-ng -0 1 -a "+mac.get()+" -c "+client.get()+" $(ip -o link | grep -i wlan | awk -F ':' '{print $2}' | head -n1)mon")
 btn_client = Button(root,bg='#000', fg='orange', text='Deauthenticate target', borderwidth=4, relief="solid", command=dAuth)
-btn_client.grid(column=0, row=25)
+btn_client.grid(column=1, row=11)
 ############################
 
 # intelx ##############
+Label(root,bg='#000', fg='orange', text='_IntelligenceX').grid(column=1, row=12)
 ix = StringVar(root, value="")
-ixTf = Entry(root, textvariable=ix).grid(column=0, row=26)
+ixTf = Entry(root, textvariable=ix).grid(column=1, row=13)
 def siX():
 		os.system("xdg-open 'https://intelx.io/?s="+ix.get()+"'")
 btn_ix = Button(root,bg='#000', fg='orange', text='Search Intelx', borderwidth=4, relief="solid", command=siX)
-btn_ix.grid(column=0, row=27)
+btn_ix.grid(column=1, row=14)
 ############################
 
 
 # EXTRA OPTIONS ##############
-Label(root,bg='#000', fg='orange', text='Extras: ').grid(column=1, row=1)
+Label(root,bg='#000', fg='orange', text='Extras: ').grid(column=2, row=1)
 ############################
 
 # e-mail headers ##############
 def anEm():
 	os.system("xdg-open 'https://mha.azurewebsites.net/'")
 btn_eml = Button(root,bg='#000', fg='orange', text='Analyze e-mail headers', borderwidth=4, relief="solid", command=anEm)
-btn_eml.grid(column=1, row=2)
+btn_eml.grid(column=2, row=2)
 
 # netstat ##############
 def netSt():
 	os.system('echo "\033[1;93m" ; netstat | grep -i "tcp\|udp" ; echo "\n" ; netstat -n | grep -i "tcp\|udp" ; echo "\033[0m"')
 btn_ntst = Button(root,bg='#000', fg='orange', text='Check Netstat', borderwidth=4, relief="solid", command=netSt)
-btn_ntst.grid(column=1, row=3)
+btn_ntst.grid(column=2, row=3)
 
 # wireshark ##############
 def Wshark():
 	os.system("xdg-open wireshark")
 btn_wrshrk = Button(root,bg='#000', fg='orange', text='Start Wireshark', borderwidth=4, relief="solid", command=Wshark)
-btn_wrshrk.grid(column=1, row=4)
+btn_wrshrk.grid(column=2, row=4)
 
 # ettercap ##############
 def Ecap():
 	os.system("xdg-open ettercap")
 btn_etrcp = Button(root,bg='#000', fg='orange', text='Start Ettercap', borderwidth=4, relief="solid", command=Ecap)
-btn_etrcp.grid(column=1, row=5)
+btn_etrcp.grid(column=2, row=5)
 
 # metasploit ##############
 def Msploit():
 	os.system("msfconsole")
 btn_mtsplt = Button(root,bg='#000', fg='orange', text='Start Metasploit', borderwidth=4, relief="solid", command=Msploit)
-btn_mtsplt.grid(column=1, row=6)
+btn_mtsplt.grid(column=2, row=6)
 
 # routersploit ##############
 def Rsploit():
 	os.system("routersploit")
 btn_rtrsplt = Button(root,bg='#000', fg='orange', text='Start Routersploit', borderwidth=4, relief="solid", command=Rsploit)
-btn_rtrsplt.grid(column=1, row=7)
+btn_rtrsplt.grid(column=2, row=7)
 
 # maltego ##############
 def Mgo():
 	os.system("xdg-open maltego")
 btn_mltg = Button(root,bg='#000', fg='orange', text='Start Maltego', borderwidth=4, relief="solid", command=Mgo)
-btn_mltg.grid(column=1, row=8)
+btn_mltg.grid(column=2, row=8)
 
 # grabify ##############
 def gbfy():
 	os.system("xdg-open 'https://grabify.link/'")
 btn_grbfy = Button(root,bg='#000', fg='orange', text='Grabify url shortener', borderwidth=4, relief="solid", command=gbfy)
-btn_grbfy.grid(column=1, row=9)
+btn_grbfy.grid(column=2, row=9)
 
 # dictionary ##############
 def selDict():
@@ -349,55 +350,59 @@ def selDict():
 	if ssid.get() != "":
 		os.system("'grep -i "+ssid.get()+" "+dictFile.get()+"'")
 btn_dict = Button(root,bg='#000', fg='orange', text='Search dictionary for B/SSID', borderwidth=4, relief="solid", command=selDict)
-btn_dict.grid(column=1, row=10)
+btn_dict.grid(column=2, row=10)
 ############################
 
+# API KEYS ##############
+Label(root,bg='#000', fg='orange', text='API Keys: ').grid(column=2, row=11)
+btn_apk = Button(root,bg='#000', fg='orange', text='Configure API Keys', borderwidth=4, relief="solid", command=openWindowAPI)
+btn_apk.grid(column=2, row=12)
+############################
 
 # EXTERNAL VISIT OPTIONS ##############
-Label(root,bg='#000', fg='orange', text='For more: ').grid(column=1, row=11)
+Label(root,bg='#000', fg='orange', text='For more: ').grid(column=3, row=1)
 ############################
 
 # osint ##############
 def visitOsint():
 	os.system("xdg-open 'https://osintframework.com/'")
 btn_osint = Button(root,bg='#000', fg='orange', text='Visit OSINT framework', borderwidth=4, relief="solid", command=visitOsint)
-btn_osint.grid(column=1, row=12)
+btn_osint.grid(column=3, row=2)
 
 # exploit-db ##############
 def eDB():
 		os.system("xdg-open 'https://www.exploit-db.com/'")
 btn_edb = Button(root,bg='#000', fg='orange', text='Visit Exploit-db', borderwidth=4, relief="solid", command=eDB)
-btn_edb.grid(column=1, row=13)
+btn_edb.grid(column=3, row=3)
 
 # pwnd ##############
 def pwnd():
 		os.system("xdg-open 'https://haveibeenpwned.com/'")
 btn_pwnd = Button(root,bg='#000', fg='orange', text='Visit HaveIBeenPwned', borderwidth=4, relief="solid", command=pwnd)
-btn_pwnd.grid(column=1, row=14)
+btn_pwnd.grid(column=3, row=4)
 
 # dehashed ##############
 def dhs():
 		os.system("xdg-open 'https://dehashed.com/'")
 btn_dhs = Button(root,bg='#000', fg='orange', text='Visit Dehashed', borderwidth=4, relief="solid", command=dhs)
-btn_dhs.grid(column=1, row=15)
+btn_dhs.grid(column=3, row=5)
+
+#  ##############
+def bdir():
+		os.system("xdg-open 'https://breachdirectory.com/search'")
+btn_ddir = Button(root,bg='#000', fg='orange', text='Visit Breachdirectory', borderwidth=4, relief="solid", command=bdir)
+btn_ddir.grid(column=3, row=6)
 
 # crackstation ##############
 def crst():
 		os.system("xdg-open 'https://crackstation.net/'")
 btn_crst = Button(root,bg='#000', fg='orange', text='Visit Crackstation', borderwidth=4, relief="solid", command=crst)
-btn_crst.grid(column=1, row=16)
-############################
-
-
-# API KEYS ##############
-Label(root,bg='#000', fg='orange', text='API Keys: ').grid(column=1, row=17)
-btn_apk = Button(root,bg='#000', fg='orange', text='Configure API Keys', borderwidth=4, relief="solid", command=openWindowAPI)
-btn_apk.grid(column=1, row=18)
+btn_crst.grid(column=3, row=7)
 ############################
 
 
 # ATTACK OPTIONS ##############
-Label(root,bg='#000', fg='orange', text='Attacks: ').grid(column=1, row=19)
+Label(root,bg='#000', fg='orange', text='Attacks: ').grid(column=3, row=8)
 ############################
 
 # aircrack-ng ##############
@@ -406,28 +411,28 @@ def airMon():
 	os.seteuid(1000)
 	os.system("if airmon-ng | grep -qi wlan ; then airmon-ng stop $(ip -o link | grep -i wlan | awk -F ':' '{print $2}' | head -n1)mon ; else sudo airmon-ng start $(ip -o link | grep -i wlan | awk -F ':' '{print $2}' | head -n1)mon ; fi")
 btn_airmn = Button(root,bg='#000', fg='orange', text='Start/stop monitor mode', borderwidth=4, relief="solid", command=airMon)
-btn_airmn.grid(column=1, row=20)
+btn_airmn.grid(column=3, row=9)
 
 # airodump
 def airoD():
 	os.seteuid(1000)
 	os.system("airodump-ng $(ip -o link | grep -i wlan | awk -F ':' '{print $2}' | head -n1)mon --bssid "+mac.get())
 btn_airmn = Button(root,bg='#000', fg='orange', text='Airodump BSSID', borderwidth=4, relief="solid", command=airoD)
-btn_airmn.grid(column=1, row=21)
+btn_airmn.grid(column=3, row=10)
 
 # reaver ##############
 def wps():
 		os.system("reaver -i $(ip -o link | grep -i wlan | awk -F ':' '{print $2}' | head -n1)mon -b "+mac.get())
 btn_rvr = Button(root,bg='#000', fg='orange', text='Reaver BSSID attack', borderwidth=4, relief="solid", command=root.destroy)
-btn_rvr.grid(column=1, row=22)
+btn_rvr.grid(column=3, row=11)
 ############################
 
 
 # DISCLAIMER & EXIT ##############
-Label(root,bg='#000', fg='#f00', font=('Helvetica',6), text='DISCLAIMER: DOES NOT PROMOTE ILLEGAL ACTIVITIES\nUSE FOR ETHICAL/EDUCATIONAL PURPOSE ONLY\nRESPECT THE PRIVACY OF OTHERS!!!').grid(column=1, row=24)
-Label(root,bg='#000', fg='orange', font=('Helvetica',8), text='by thanasxda').grid(column=1, row=25)
+Label(root,bg='#000', fg='#f00', font=('Helvetica',6), text='DISCLAIMER: DOES NOT PROMOTE ILLEGAL ACTIVITIES\nUSE FOR ETHICAL/EDUCATIONAL PURPOSE ONLY\nRESPECT THE PRIVACY OF OTHERS!!!').grid(column=3, row=12)
+Label(root,bg='#000', fg='orange', font=('Helvetica',8), text='by thanasxda').grid(column=3, row=13)
 btn_exit = Button(root,bg='#000', fg='orange', text='Exit', borderwidth=4, relief="solid", command=root.destroy)
-btn_exit.grid(column=1, row=27)
+btn_exit.grid(column=3, row=14)
 ############################
 
 
