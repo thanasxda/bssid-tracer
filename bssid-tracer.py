@@ -279,6 +279,15 @@ btn_client = Button(root,bg='#000', fg='orange', text='Deauthenticate target', b
 btn_client.grid(column=0, row=25)
 ############################
 
+# intelx ##############
+ix = StringVar(root, value="")
+ixTf = Entry(root, textvariable=ix).grid(column=0, row=26)
+def siX():
+		os.system("xdg-open 'https://intelx.io/?s="+ix.get()+"'")
+btn_ix = Button(root,bg='#000', fg='orange', text='Search Intelx', borderwidth=4, relief="solid", command=siX)
+btn_ix.grid(column=0, row=27)
+############################
+
 
 # EXTRA OPTIONS ##############
 Label(root,bg='#000', fg='orange', text='Extras: ').grid(column=1, row=1)
@@ -361,31 +370,34 @@ btn_edb = Button(root,bg='#000', fg='orange', text='Visit Exploit-db', borderwid
 btn_edb.grid(column=1, row=13)
 
 # pwnd ##############
-def eDB():
+def pwnd():
 		os.system("xdg-open 'https://haveibeenpwned.com/'")
-btn_edb = Button(root,bg='#000', fg='orange', text='Visit HaveIBeenPwned', borderwidth=4, relief="solid", command=eDB)
-btn_edb.grid(column=1, row=14)
+btn_pwnd = Button(root,bg='#000', fg='orange', text='Visit HaveIBeenPwned', borderwidth=4, relief="solid", command=pwnd)
+btn_pwnd.grid(column=1, row=14)
 
-# intelx ##############
-Label(root,bg='#000', fg='orange', text='Intelligence-X: ').grid(column=1, row=15)
-ix = StringVar(root, value="")
-ixTf = Entry(root, textvariable=ix).grid(column=1, row=16)
-def siX():
-		os.system("xdg-open 'https://intelx.io/?s="+ix.get()+"'")
-btn_ix = Button(root,bg='#000', fg='orange', text='Search Intelx', borderwidth=4, relief="solid", command=siX)
-btn_ix.grid(column=1, row=17)
+# dehashed ##############
+def dhs():
+		os.system("xdg-open 'https://dehashed.com/'")
+btn_dhs = Button(root,bg='#000', fg='orange', text='Visit Dehashed', borderwidth=4, relief="solid", command=dhs)
+btn_dhs.grid(column=1, row=15)
+
+# crackstation ##############
+def crst():
+		os.system("xdg-open 'https://crackstation.net/'")
+btn_crst = Button(root,bg='#000', fg='orange', text='Visit Crackstation', borderwidth=4, relief="solid", command=crst)
+btn_crst.grid(column=1, row=16)
 ############################
 
 
 # API KEYS ##############
-Label(root,bg='#000', fg='orange', text='API Keys: ').grid(column=1, row=18)
+Label(root,bg='#000', fg='orange', text='API Keys: ').grid(column=1, row=17)
 btn_apk = Button(root,bg='#000', fg='orange', text='Configure API Keys', borderwidth=4, relief="solid", command=openWindowAPI)
-btn_apk.grid(column=1, row=19)
+btn_apk.grid(column=1, row=18)
 ############################
 
 
 # ATTACK OPTIONS ##############
-Label(root,bg='#000', fg='orange', text='Attacks: ').grid(column=1, row=20)
+Label(root,bg='#000', fg='orange', text='Attacks: ').grid(column=1, row=19)
 ############################
 
 # aircrack-ng ##############
@@ -394,20 +406,20 @@ def airMon():
 	os.seteuid(1000)
 	os.system("if airmon-ng | grep -qi wlan ; then airmon-ng stop $(ip -o link | grep -i wlan | awk -F ':' '{print $2}' | head -n1)mon ; else sudo airmon-ng start $(ip -o link | grep -i wlan | awk -F ':' '{print $2}' | head -n1)mon ; fi")
 btn_airmn = Button(root,bg='#000', fg='orange', text='Start/stop monitor mode', borderwidth=4, relief="solid", command=airMon)
-btn_airmn.grid(column=1, row=21)
+btn_airmn.grid(column=1, row=20)
 
 # airodump
 def airoD():
 	os.seteuid(1000)
 	os.system("airodump-ng $(ip -o link | grep -i wlan | awk -F ':' '{print $2}' | head -n1)mon --bssid "+mac.get())
 btn_airmn = Button(root,bg='#000', fg='orange', text='Airodump BSSID', borderwidth=4, relief="solid", command=airoD)
-btn_airmn.grid(column=1, row=22)
+btn_airmn.grid(column=1, row=21)
 
 # reaver ##############
 def wps():
 		os.system("reaver -i $(ip -o link | grep -i wlan | awk -F ':' '{print $2}' | head -n1)mon -b "+mac.get())
 btn_rvr = Button(root,bg='#000', fg='orange', text='Reaver BSSID attack', borderwidth=4, relief="solid", command=root.destroy)
-btn_rvr.grid(column=1, row=23)
+btn_rvr.grid(column=1, row=22)
 ############################
 
 
@@ -415,7 +427,7 @@ btn_rvr.grid(column=1, row=23)
 Label(root,bg='#000', fg='#f00', font=('Helvetica',6), text='DISCLAIMER: DOES NOT PROMOTE ILLEGAL ACTIVITIES\nUSE FOR ETHICAL/EDUCATIONAL PURPOSE ONLY\nRESPECT THE PRIVACY OF OTHERS!!!').grid(column=1, row=24)
 Label(root,bg='#000', fg='orange', font=('Helvetica',8), text='by thanasxda').grid(column=1, row=25)
 btn_exit = Button(root,bg='#000', fg='orange', text='Exit', borderwidth=4, relief="solid", command=root.destroy)
-btn_exit.grid(column=1, row=26)
+btn_exit.grid(column=1, row=27)
 ############################
 
 
