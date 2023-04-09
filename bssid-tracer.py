@@ -302,7 +302,7 @@ btn_eml.grid(column=2, row=2)
 
 # netstat ##############
 def netSt():
-	os.system('echo "\033[1;93m" ; netstat | grep -i "tcp\|udp" ; echo "\n" ; netstat -n | grep -i "tcp\|udp" ; echo "\033[0m"')
+	os.system('echo "\033[1;93m" ; netstat | grep -i "tcp\|udp" ; echo "\n" ; netstat -n | grep -i "tcp\|udp" ; sudo netstat -tulpn ; echo "\033[0m"')
 btn_ntst = Button(root,bg='#000', fg='orange', text='Check Netstat', borderwidth=4, relief="solid", command=netSt)
 btn_ntst.grid(column=2, row=3)
 
@@ -353,11 +353,30 @@ btn_dict = Button(root,bg='#000', fg='orange', text='Search dictionary for B/SSI
 btn_dict.grid(column=2, row=10)
 ############################
 
-# API KEYS ##############
-Label(root,bg='#000', fg='orange', text='API Keys: ').grid(column=2, row=11)
-btn_apk = Button(root,bg='#000', fg='orange', text='Configure API Keys', borderwidth=4, relief="solid", command=openWindowAPI)
-btn_apk.grid(column=2, row=12)
+
+# ATTACK OPTIONS ##############
+# aircrack-ng ##############
+# airmon #############
+def airMon():
+	os.seteuid(1000)
+	os.system("if airmon-ng | grep -qi wlan ; then airmon-ng stop $(ip -o link | grep -i wlan | awk -F ':' '{print $2}' | head -n1)mon ; else sudo airmon-ng start $(ip -o link | grep -i wlan | awk -F ':' '{print $2}' | head -n1)mon ; fi")
+btn_airmn = Button(root,bg='#000', fg='orange', text='Start/stop monitor mode', borderwidth=4, relief="solid", command=airMon)
+btn_airmn.grid(column=2, row=11)
+
+# airodump #############
+def airoD():
+	os.seteuid(1000)
+	os.system("airodump-ng $(ip -o link | grep -i wlan | awk -F ':' '{print $2}' | head -n1)mon --bssid "+mac.get())
+btn_airmn = Button(root,bg='#000', fg='orange', text='Airodump BSSID', borderwidth=4, relief="solid", command=airoD)
+btn_airmn.grid(column=2, row=12)
+
+# reaver ##############
+def wps():
+		os.system("reaver -i $(ip -o link | grep -i wlan | awk -F ':' '{print $2}' | head -n1)mon -b "+mac.get())
+btn_rvr = Button(root,bg='#000', fg='orange', text='Reaver BSSID attack', borderwidth=4, relief="solid", command=root.destroy)
+btn_rvr.grid(column=2, row=13)
 ############################
+
 
 # EXTERNAL VISIT OPTIONS ##############
 Label(root,bg='#000', fg='orange', text='For more: ').grid(column=3, row=1)
@@ -387,7 +406,7 @@ def dhs():
 btn_dhs = Button(root,bg='#000', fg='orange', text='Visit Dehashed', borderwidth=4, relief="solid", command=dhs)
 btn_dhs.grid(column=3, row=5)
 
-#  ##############
+# breachdirectory ##############
 def bdir():
 		os.system("xdg-open 'https://breachdirectory.com/search'")
 btn_ddir = Button(root,bg='#000', fg='orange', text='Visit Breachdirectory', borderwidth=4, relief="solid", command=bdir)
@@ -398,33 +417,19 @@ def crst():
 		os.system("xdg-open 'https://crackstation.net/'")
 btn_crst = Button(root,bg='#000', fg='orange', text='Visit Crackstation', borderwidth=4, relief="solid", command=crst)
 btn_crst.grid(column=3, row=7)
+
+# epieos ##############
+def epieos():
+		os.system("xdg-open 'https://epieos.com/'")
+btn_epieos = Button(root,bg='#000', fg='orange', text='Visit Epieos', borderwidth=4, relief="solid", command=epieos)
+btn_epieos.grid(column=3, row=8)
 ############################
 
 
-# ATTACK OPTIONS ##############
-Label(root,bg='#000', fg='orange', text='Attacks: ').grid(column=3, row=8)
-############################
-
-# aircrack-ng ##############
-# airmon
-def airMon():
-	os.seteuid(1000)
-	os.system("if airmon-ng | grep -qi wlan ; then airmon-ng stop $(ip -o link | grep -i wlan | awk -F ':' '{print $2}' | head -n1)mon ; else sudo airmon-ng start $(ip -o link | grep -i wlan | awk -F ':' '{print $2}' | head -n1)mon ; fi")
-btn_airmn = Button(root,bg='#000', fg='orange', text='Start/stop monitor mode', borderwidth=4, relief="solid", command=airMon)
-btn_airmn.grid(column=3, row=9)
-
-# airodump
-def airoD():
-	os.seteuid(1000)
-	os.system("airodump-ng $(ip -o link | grep -i wlan | awk -F ':' '{print $2}' | head -n1)mon --bssid "+mac.get())
-btn_airmn = Button(root,bg='#000', fg='orange', text='Airodump BSSID', borderwidth=4, relief="solid", command=airoD)
-btn_airmn.grid(column=3, row=10)
-
-# reaver ##############
-def wps():
-		os.system("reaver -i $(ip -o link | grep -i wlan | awk -F ':' '{print $2}' | head -n1)mon -b "+mac.get())
-btn_rvr = Button(root,bg='#000', fg='orange', text='Reaver BSSID attack', borderwidth=4, relief="solid", command=root.destroy)
-btn_rvr.grid(column=3, row=11)
+# API KEYS ##############
+Label(root,bg='#000', fg='orange', text='API Keys: ').grid(column=3, row=9)
+btn_apk = Button(root,bg='#000', fg='orange', text='Configure API Keys', borderwidth=4, relief="solid", command=openWindowAPI)
+btn_apk.grid(column=3, row=10)
 ############################
 
 
